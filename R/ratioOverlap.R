@@ -94,6 +94,7 @@ if(class(r)=="RasterLayer"){
     ratq75 <- q75 / raster::ncell(r[!is.na(shp)])
     ratio <- rbind(paste0("The proportion of the range below 25%: ", ratq25), paste0("The proportion of the range between 25% and 50%: ", ratq50), paste0("The proportion of the range between 50% and 75%: ", ratq75))
   }
+  correlation = NULL
   if(!is.null(rasMask)){
     rasMask.resam <- raster::resample(rasMask, r, method = "bilinear")
     rRasmask <- raster::stack(rasMask.resam, r)
