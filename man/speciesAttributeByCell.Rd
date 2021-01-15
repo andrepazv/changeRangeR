@@ -4,11 +4,6 @@
 \alias{speciesAttributeByCell}
 \title{title}
 \usage{
-<<<<<<< HEAD
-speciesAttributeByCell(cbsDir, attrTable, scenario, method = "mean", env,
-  outDir = NULL, richnessRaster = NULL, verbose = F,
-  mc.cores = mc.cores)
-=======
 speciesAttributeByCell(
   cbsDir,
   attrTable,
@@ -17,12 +12,12 @@ speciesAttributeByCell(
   env,
   outDir = NULL,
   richnessRaster = NULL,
-  verbose = F
+  verbose = F,
+  mc.cores = mc.cores
 )
 }
 \value{
 
->>>>>>> dc1614cc555408af9ec79a80456eeaa74e95ed95
 }
 \description{
 title
