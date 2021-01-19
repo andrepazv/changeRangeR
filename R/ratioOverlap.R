@@ -20,15 +20,18 @@ ratioOverlap <- function(r, shp = NULL, rasMask = NULL, field, category){
   require(sf)
   require(rgdal)
   require(raster)
+  require(rgeos)
   require(dplyr)
 
 ## if r is a shapefile
 if(class(r) != "RasterLayer" & class(shp) != "RasterLayer"){
+  r <- rgeos::gBuffer(r, byid = T, width = 0)
+  shp <- rgeos::gBuffer(shp, byid = T, width = 0)
   r <- sf::st_as_sf(r)
   shp <- sf::st_as_sf(shp)
 
   if(category == "All"){
-    maskedRange <- sf::st_intersection(r, shp)
+   maskedRange <- sf::st_intersection(r, shp)
   }else{
     fc <- lapply(category, function(x) dplyr::filter(shp, shp[[field]]==x))
     fc <- do.call("rbind", fc)
@@ -40,14 +43,16 @@ if(class(r) != "RasterLayer" & class(shp) != "RasterLayer"){
 }else{
   if(class(r) != "RasterLayer" & class(shp) == "RasterLayer"){
     r <- raster::rasterize(r, shp, method = "ngb")
+    maskedRange <- raster::mask(r, shp)
     maskedQuants <- raster::quantile(raster::mask(shp, r))
     q25 <- raster::ncell(shp[sph < maskedQuants[2]])
     q50 <- raster::ncell(shp[shp > maskedQuants[2] & shp < maskedQuants[3]])
     q75 <- raster::ncell(shp[shp > maskedQuants[3] & shp < maskedQuants[4]])
     ratq25 <- q25 / raster::ncell(r[!is.na(shp)])
     ratq50 <- q50 / raster::ncell(r[!is.na(shp)])
-    ratq75 <- q75 / raster::ncell(r[!is.na(shp)])
-    ratio <- rbind(paste0("The proportion of the range below 25%: ", ratq25), paste0("The proportion of the range between 25% and 50%: ", ratq50), paste0("The proportion of the range between 50% and 75%: ", ratq75))
+    ratq100 <- q100 / raster::ncell(r[!is.na(shp)])
+    ratio <- rbind(paste0("The proportion of the range below 25%: ", ratq25), paste0("The proportion of the range between 25% and 50%: ", ratq50), paste0("The proportion of the range between 50% and 75%: ", ratq75),
+                   paste0("The proportion of the range between 75% and 100%: ", ratq100))
 
     if(!is.null(rasMask)){
       rasMask.resam <- raster::resample(rasMask, r, method = "bilinear")
@@ -85,14 +90,20 @@ if(class(r)=="RasterLayer"){
     ratio <- paste0("Percentage of range within shape is ", ratio, "%")
   }
   if(class(shp) == "RasterLayer"){
+    shp <- raster::crop(shp, r)
+    r <- raster::crop(r, shp)
+    maskedRange <- raster::mask(r, shp)
     maskedQuants <- raster::quantile(raster::mask(shp, r))
     q25 <- raster::ncell(shp[sph < maskedQuants[2]])
     q50 <- raster::ncell(shp[shp > maskedQuants[2] & shp < maskedQuants[3]])
     q75 <- raster::ncell(shp[shp > maskedQuants[3] & shp < maskedQuants[4]])
+    q100 <- raster::ncell(shp[shp > maskedQuants[4] & shp < maskedQuants[5]])
     ratq25 <- q25 / raster::ncell(r[!is.na(shp)])
     ratq50 <- q50 / raster::ncell(r[!is.na(shp)])
     ratq75 <- q75 / raster::ncell(r[!is.na(shp)])
-    ratio <- rbind(paste0("The proportion of the range below 25%: ", ratq25), paste0("The proportion of the range between 25% and 50%: ", ratq50), paste0("The proportion of the range between 50% and 75%: ", ratq75))
+    ratq100 <- q100 / raster::ncell(r[!is.na(shp)])
+    ratio <- rbind(paste0("The proportion of the range below 25%: ", ratq25), paste0("The proportion of the range between 25% and 50%: ", ratq50), paste0("The proportion of the range between 50% and 75%: ", ratq75),
+                   paste0("The proportion of the range between 75% and 100%: ", ratq100))
   }
   correlation = NULL
   if(!is.null(rasMask)){
