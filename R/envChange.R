@@ -53,11 +53,11 @@ if(class(binaryRange) != "RasterLayer"){
 
   if(bound == "both"){
 #    if(correlation = FALSE){
-      rStack[rStack < min(thredhold)] <- NA
+      rStack[rStack < min(threshold)] <- NA
       rStack[rStack > max(threshold)] <- NA
       rStack[!is.na(rStack)] <- 1
 #    } else {
-#      rStack[rStack < min(thredhold)] <- NA
+#      rStack[rStack < min(threshold)] <- NA
 #      rStack[rStack > max(threshold)] <- NA
 #    }
   }
