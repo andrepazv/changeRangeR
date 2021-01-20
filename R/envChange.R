@@ -12,11 +12,14 @@
 #' coefficient with SDM will be computed for overlapping areas.
 #' @export
 
-
+#SDM <- raster::raster("inst/extdata/DemoData/SDM/olinguito/olinguitoSDM.tif")
 #binaryRange <- raster::raster("inst/extdata/DemoData/SDM/olinguito/Climatically_suitable_projected1.tif")
+#binaryRange <- raster::projectRaster(binaryRange, SDM, method = "bilinear")
 #rStack <- raster::stack(list.files(path = "inst/extdata/DemoData/MODIS", pattern = "\\.tif$", full.names = T))
 #rStack <- raster::projectRaster(rStack, SDM, method = 'bilinear')
 #threshold <- 50.086735
+#test <- envChange(rStack, binaryRange, threshold, bound = "upper")
+#test2 <- envChange(rStack, binaryRange, threshold, bound = "lower")
 
 ### NEED TO ADD IN CONTINUOUS OPTION OVER TIME PLOTTING
 
