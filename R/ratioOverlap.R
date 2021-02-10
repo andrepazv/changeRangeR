@@ -12,26 +12,31 @@
 #' @export
 #'
 
-r = raster(paste0(system.file(package="changeRangeR"), "/extdata/DemoData/SDM/olinguito/Forest_suitable_projected1.tif"))
-mcp <- function (xy) {
-  xy <- as.data.frame(coordinates(xy))
-  coords.t <- chull(xy[, 1], xy[, 2])
-  xy.bord <- xy[coords.t, ]
-  xy.bord <- rbind(xy.bord[nrow(xy.bord), ], xy.bord)
-  return(SpatialPolygons(list(Polygons(list(Polygon(as.matrix(xy.bord))), 1))))
-}
-rbuf = gBuffer(mcp(dismo::randomPoints(r, 3)), width = 50000)
-rbuf@proj4string <- crs(r)
-r = rbuf
-shp = readOGR(paste0(system.file(package="changeRangeR", "/extdata/DemoData/shapefiles")), "WDPA_COL_olinguito")
-shp = spTransform(shp, CRS("+proj=utm +zone=18 +south +datum=WGS84 +units=m +no_defs"))
-shp = rasterize(shp, r)
-field = "DESIG_ENG"
-category = "All"
-category = c("National Natural Park", "Regional Natural Parks", "Integrated Management Regional Districts")
-subfield = TRUE
-
-t <- ratioOverlap(r, shp, field = field, category = category, subfield= F)
+# # load r
+# r = raster(paste0(system.file(package="changeRangeR"), "/extdata/DemoData/SDM/olinguito/Forest_suitable_projected1.tif"))
+# # create random polygon based on r
+# mcp <- function (xy) {
+#   xy <- as.data.frame(coordinates(xy))
+#   coords.t <- chull(xy[, 1], xy[, 2])
+#   xy.bord <- xy[coords.t, ]
+#   xy.bord <- rbind(xy.bord[nrow(xy.bord), ], xy.bord)
+#   return(SpatialPolygons(list(Polygons(list(Polygon(as.matrix(xy.bord))), 1))))
+# }
+# rbuf = gBuffer(mcp(dismo::randomPoints(r, 3)), width = 50000)
+# rbuf@proj4string <- crs(r)
+# r = rbuf
+# # load shp and reproject
+# shp = readOGR(paste0(system.file(package="changeRangeR", "/extdata/DemoData/shapefiles")), "WDPA_COL_olinguito")
+# shp = spTransform(shp, CRS("+proj=utm +zone=18 +south +datum=WGS84 +units=m +no_defs"))
+# # convert shp to raster
+# shp = rasterize(shp, r)
+# # Define args
+# field = "DESIG_ENG"
+# #category = "All"
+# category = c("National Natural Park", "Regional Natural Parks", "Integrated Management Regional Districts")
+# subfield = TRUE
+# #test
+# t <- ratioOverlap(r, shp, field = field, category = category, subfield= F)
 
 
 ratioOverlap <- function(r, shp = NULL, rasMask = NULL, field=NULL, category=NULL, subfield = FALSE){
