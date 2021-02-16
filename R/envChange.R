@@ -8,7 +8,7 @@
 #' "neither" does not threshold at any point. "both" thresholds at both threshold values (if provided; e.g.,
 #' minimum and maximum temperature).
 #' @param correlation boolean. If FALSE, environmental variable will be converted to a binary map and used as a mask.
-#' If TRUE, environmental variable is only thresholded by bounds, but left continuous. Then#' Pearson's correlation
+#' If TRUE, environmental variable is only thresholded by bounds, but left continuous. Then, Pearson's correlation
 #' coefficient with SDM will be computed for overlapping areas.
 #' @export
 
@@ -21,7 +21,6 @@
 #test <- envChange(rStack, binaryRange, threshold, bound = "upper")
 #test2 <- envChange(rStack, binaryRange, threshold, bound = "lower")
 
-### NEED TO ADD IN CONTINUOUS OPTION OVER TIME PLOTTING
 
 envChange <- function(rStack, binaryRange, threshold, bound, correlation = F){
   require(raster)
