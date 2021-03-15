@@ -63,7 +63,7 @@ ratioOverlap <- function(r, shp = NULL, rasMask = NULL, field=NULL, category=NUL
         maskedRange <- sf::st_intersection(r, fc)
       }
       ratio <- (sum(sf::st_area(maskedRange)) / sf::st_area(r)) * 100
-      ratio <- paste0("Percentage of range within shape is ", ratio, "%")
+      ratio <- paste0("Percentage of range within shape is ", round(x = ratio, digits = 3), "%")
       correlation <- NULL
     }
     if(subfield == TRUE){
@@ -85,7 +85,7 @@ ratioOverlap <- function(r, shp = NULL, rasMask = NULL, field=NULL, category=NUL
         maskedRange <- list(maskedRange)
       }
       ratio <- lapply(maskedRange, function(x) sum(sf::st_area(x)) / (sf::st_area(r)) * 100)
-      ratio <- paste0("Percentage of range within ", category, " is ", ratio, "%")
+      ratio <- paste0("Percentage of range within ", category, " is ", round(x = ratio, digits = 3), "%")
       correlation <- NULL
     }
   }else{
@@ -99,8 +99,8 @@ ratioOverlap <- function(r, shp = NULL, rasMask = NULL, field=NULL, category=NUL
       ratq25 <- q25 / raster::ncell(r[!is.na(shp)])
       ratq50 <- q50 / raster::ncell(r[!is.na(shp)])
       ratq100 <- q100 / raster::ncell(r[!is.na(shp)])
-      ratio <- rbind(paste0("The proportion of the range below 25%: ", ratq25), paste0("The proportion of the range between 25% and 50%: ", ratq50), paste0("The proportion of the range between 50% and 75%: ", ratq75),
-                     paste0("The proportion of the range between 75% and 100%: ", ratq100))
+      ratio <- rbind(paste0("The proportion of the range below 25%: ", round(x = ratq25, digits = 3)), paste0("The proportion of the range between 25% and 50%: ", round(x = ratq50, digits = 3)), paste0("The proportion of the range between 50% and 75%: ", round(x = ratq75, digits = 3)),
+                     paste0("The proportion of the range between 75% and 100%: ", round(x = ratq100, digits = 3)))
 
       if(!is.null(rasMask)){
         rasMask.resam <- raster::resample(rasMask, r, method = "bilinear")
@@ -168,7 +168,7 @@ ratioOverlap <- function(r, shp = NULL, rasMask = NULL, field=NULL, category=NUL
         maskedRange <- list(maskedRange)
       }
       ratio <- lapply(maskedRange, function(x) raster::ncell(x[!is.na(x)]) / raster::ncell(r[!is.na(r)]) * 100)
-      ratio <- paste0("Percentage of range within ", category, " is ", ratio, "%")
+      ratio <- paste0("Percentage of range within ", category, " is ", round(x = ratio, digits = 3), "%")
       #ratio <- raster::ncell(maskedRange[!is.na(maskedRange)]) / raster::ncell(r[!is.na(r)]) * 100
       #ratio <- paste0("Percentage of range within shape is ", ratio, "%")
     }
@@ -185,8 +185,8 @@ ratioOverlap <- function(r, shp = NULL, rasMask = NULL, field=NULL, category=NUL
       ratq50 <- q50 / raster::ncell(r[!is.na(shp)])
       ratq75 <- q75 / raster::ncell(r[!is.na(shp)])
       ratq100 <- q100 / raster::ncell(r[!is.na(shp)])
-      ratio <- rbind(paste0("The proportion of the range below 25%: ", ratq25), paste0("The proportion of the range between 25% and 50%: ", ratq50), paste0("The proportion of the range between 50% and 75%: ", ratq75),
-                     paste0("The proportion of the range between 75% and 100%: ", ratq100))
+      ratio <- rbind(paste0("The proportion of the range below 25%: ", round(x = ratq25, digits = 3)), paste0("The proportion of the range between 25% and 50%: ", round(x = ratq50, digits = 3)), paste0("The proportion of the range between 50% and 75%: ", round(x = ratq75, digits = 3)),
+                     paste0("The proportion of the range between 75% and 100%: ", round(x = ratq100, digits = 3)))
     }
     correlation = NULL
     if(!is.null(rasMask)){
